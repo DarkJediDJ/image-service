@@ -13,7 +13,7 @@ type Cloud struct {
 	session *session.Session
 }
 
-func Init(s *session.Session) *Cloud {
+func New(s *session.Session) *Cloud {
 	return &Cloud{
 		session: s,
 	}

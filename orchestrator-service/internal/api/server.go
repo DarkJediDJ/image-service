@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/segmentio/kafka-go"
 
-	"github.com/DarkJediDJ/image-service/orchestrator-service/internal/api/handler"
+	"github.com/DarkJediDJ/image-service/orchestrator-service/internal/api/handlers"
 )
 
 type App struct {
@@ -21,7 +21,7 @@ func NewApp() *App {
 
 func (a *App) InitRouter(conn *kafka.Conn, session *session.Session) {
 	myRouter := mux.NewRouter().StrictSlash(false)
-	myRouter.HandleFunc("/", handler.Init(conn, session).Process).Methods("POST")
+	myRouter.HandleFunc("/", handlers.NewHandler(conn, session).Process).Methods("POST")
 	a.Router = myRouter
 }
 

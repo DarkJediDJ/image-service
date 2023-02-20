@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/joho/godotenv"
 	"github.com/segmentio/kafka-go"
 )
 
@@ -17,6 +18,10 @@ const (
 )
 
 func main() {
+	if err := godotenv.Load(".env"); err != nil {
+		log.Fatalf("An Error Occured while .env loading%v", err)
+	}
+
 	a := server.NewApp()
 
 	conn, err := kafka.DialLeader(context.Background(), "tcp", "localhost:9092", "default-images-service", 0)
