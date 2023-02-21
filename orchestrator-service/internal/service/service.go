@@ -10,17 +10,16 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-type Service struct {
-	bucket ICloud
-	broker IBroker
+type service struct {
+	bucket Cloud
+	broker Broker
 }
 
-func NewService(c *kafka.Conn, s *session.Session) *Service {
-	return &Service{broker: broker.New(c), bucket: cloud.New(s)}
-
+func NewService(c *kafka.Conn, s *session.Session) *service {
+	return &service{broker: broker.New(c), bucket: cloud.New(s)}
 }
 
-func (s *Service) Process(img []byte) (arr []broker.Message, err error) {
+func (s *service) Process(img []byte) (arr []broker.Message, err error) {
 
 	file, err := s.bucket.Upload(img, uuid.NewV4().String())
 	if err != nil {

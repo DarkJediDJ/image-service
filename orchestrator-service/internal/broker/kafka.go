@@ -9,12 +9,12 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-type Broker struct {
+type broker struct {
 	conn *kafka.Conn
 }
 
-func New(c *kafka.Conn) *Broker {
-	return &Broker{
+func New(c *kafka.Conn) *broker {
+	return &broker{
 		conn: c,
 	}
 }
@@ -23,7 +23,7 @@ type Message struct {
 	Link string `json:"link"`
 }
 
-func (b *Broker) Write(mes []byte) error {
+func (b *broker) Write(mes []byte) error {
 	_, err := b.conn.Write(mes)
 	if err != nil {
 		return err
@@ -32,14 +32,14 @@ func (b *Broker) Write(mes []byte) error {
 	return nil
 }
 
-func (b *Broker) Read() (arr []Message, err error) {
+func (b *broker) Read() (arr []Message, err error) {
 	reader := newKafkaReader("localhost:9092", "processed-images-topic")
 	defer reader.Close()
 	var message Message
 
 	for {
 		m, err := reader.ReadMessage(context.Background())
-		if err == io.EOF {
+		if err != nil && err == io.EOF {
 			err = json.Unmarshal(m.Value, &message)
 			if err != nil {
 				return []Message{}, err

@@ -6,11 +6,11 @@ type IService interface {
 	Process(img []byte) (arr []broker.Message, err error)
 }
 
-type ICloud interface {
+type Cloud interface {
 	Upload(img []byte, key string) (string, error)
 }
 
-type IBroker interface {
+type Broker interface {
 	Write(mes []byte) error
 	Read() (arr []broker.Message, err error)
 }

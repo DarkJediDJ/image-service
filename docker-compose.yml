@@ -24,7 +24,6 @@ services:
       - AWS_REGION=eu-west-2
       - AWS_ACCESS_KEY_ID=xyz
       - AWS_SECRET_ACCESS_KEY=aaa
-      - AWS_
     volumes:
       - ./data:/tmp/localstack
       - "/var/run/docker.sock:/var/run/docker.sock"

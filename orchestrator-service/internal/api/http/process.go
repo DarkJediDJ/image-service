@@ -1,4 +1,4 @@
-package handlers
+package http
 
 import (
 	"encoding/json"
@@ -15,13 +15,13 @@ func (h *Handler) Process(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	kafkaResp, err := h.service.Process(img)
+	proccessedImg, err := h.service.Process(img)
 	if err != nil {
 		w.WriteHeader(http.StatusUnprocessableEntity)
 		return
 	}
 
-	resp, err := json.Marshal(kafkaResp)
+	resp, err := json.Marshal(proccessedImg)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
