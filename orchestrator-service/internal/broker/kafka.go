@@ -25,16 +25,14 @@ type Message struct {
 
 func (b *broker) Write(mes []byte) error {
 	_, err := b.conn.Write(mes)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 func (b *broker) Read() (arr []Message, err error) {
 	reader := newKafkaReader("localhost:9092", "processed-images-topic")
-	defer reader.Close()
+	defer func() {
+		err = reader.Close()
+	}()
 	var message Message
 
 	for {
@@ -59,7 +57,6 @@ func (b *broker) Read() (arr []Message, err error) {
 		arr = append(arr, message)
 	}
 
-	err = reader.Close()
 	return arr, err
 }
 

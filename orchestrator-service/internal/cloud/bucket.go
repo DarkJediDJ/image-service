@@ -9,6 +9,10 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
+const (
+	port = "http://localhost:4566/"
+)
+
 type cloud struct {
 	session *session.Session
 }
@@ -30,5 +34,5 @@ func (c *cloud) Upload(img []byte, key string) (string, error) {
 		ContentType: aws.String("image/png"),
 	})
 
-	return "http://localhost:4566/" + bucketName + "/" + key, err
+	return port + bucketName + "/" + key, err
 }

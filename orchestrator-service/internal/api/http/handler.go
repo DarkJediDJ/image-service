@@ -1,4 +1,4 @@
-package http
+package http_handler
 
 import (
 	"github.com/DarkJediDJ/image-service/orchestrator-service/internal/service"

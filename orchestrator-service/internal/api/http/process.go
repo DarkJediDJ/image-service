@@ -1,4 +1,4 @@
-package http
+package http_handler
 
 import (
 	"encoding/json"
@@ -11,13 +11,13 @@ func (h *Handler) Process(w http.ResponseWriter, r *http.Request) {
 
 	img, err := io.ReadAll(r.Body)
 	if err != nil {
-		w.WriteHeader(http.StatusUnprocessableEntity)
+		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
 		return
 	}
 
 	proccessedImg, err := h.service.Process(img)
 	if err != nil {
-		w.WriteHeader(http.StatusUnprocessableEntity)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -27,7 +27,11 @@ func (h *Handler) Process(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write(resp)
-
+	_, err = w.Write(resp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	
 	w.WriteHeader(http.StatusCreated)
 }

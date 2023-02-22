@@ -20,7 +20,6 @@ func NewService(c *kafka.Conn, s *session.Session) *service {
 }
 
 func (s *service) Process(img []byte) (arr []broker.Message, err error) {
-
 	file, err := s.bucket.Upload(img, uuid.NewV4().String())
 	if err != nil {
 		return nil, err
