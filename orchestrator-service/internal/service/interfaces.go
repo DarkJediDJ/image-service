@@ -2,7 +2,7 @@ package service
 
 import "github.com/DarkJediDJ/image-service/orchestrator-service/internal/broker"
 
-type IService interface {
+type Service interface {
 	Process(img []byte) (arr []broker.Message, err error)
 }
 
