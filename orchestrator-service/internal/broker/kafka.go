@@ -9,6 +9,11 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
+const (
+	host  = "localhost:9092"
+	topic = "processed-images-service"
+)
+
 type broker struct {
 	conn *kafka.Conn
 }
@@ -28,36 +33,24 @@ func (b *broker) Write(mes []byte) error {
 	return err
 }
 
-func (b *broker) Read() (arr []Message, err error) {
-	reader := newKafkaReader("localhost:9092", "processed-images-topic")
+func (b *broker) Read() (arr []byte, err error) {
+	reader := newKafkaReader(host, topic)
 	defer func() {
 		err = reader.Close()
 	}()
-	var message Message
 
-	for {
-		m, err := reader.ReadMessage(context.Background())
-		if err != nil && err == io.EOF {
-			err = json.Unmarshal(m.Value, &message)
-			if err != nil {
-				return []Message{}, err
-			}
-
-			fmt.Println(message.Link)
-			arr = append(arr, message)
-			break
-		}
-
-		err = json.Unmarshal(m.Value, &message)
-		if err != nil {
-			return []Message{}, err
-		}
-
-		fmt.Println(message.Link)
-		arr = append(arr, message)
+	m, err := reader.ReadMessage(context.Background())
+	if err != nil && err == io.EOF {
+		return m.Value, err
 	}
-
-	return arr, err
+	var mes []Message
+	err = json.Unmarshal(m.Value, &mes)
+	if err != nil {
+		fmt.Printf("Error unmarshaling message:%s", string(m.Value))
+		return nil, err
+	}
+	fmt.Println(mes)
+	return m.Value, err
 }
 
 func newKafkaReader(ports, topics string) *kafka.Reader {

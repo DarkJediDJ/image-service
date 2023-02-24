@@ -19,7 +19,7 @@ func NewService(c *kafka.Conn, s *session.Session) *service {
 	return &service{broker: broker.New(c), bucket: cloud.New(s)}
 }
 
-func (s *service) Process(img []byte) (arr []broker.Message, err error) {
+func (s *service) Process(img []byte) (arr []byte, err error) {
 	file, err := s.bucket.Upload(img, uuid.NewV4().String())
 	if err != nil {
 		return nil, err
@@ -33,6 +33,5 @@ func (s *service) Process(img []byte) (arr []broker.Message, err error) {
 	if err = s.broker.Write(mes); err != nil {
 		return nil, err
 	}
-
 	return s.broker.Read()
 }

@@ -1,9 +1,7 @@
 package service
 
-import "github.com/DarkJediDJ/image-service/orchestrator-service/internal/broker"
-
 type Service interface {
-	Process(img []byte) (arr []broker.Message, err error)
+	Process(img []byte) (arr []byte, err error)
 }
 
 type Cloud interface {
@@ -12,5 +10,5 @@ type Cloud interface {
 
 type Broker interface {
 	Write(mes []byte) error
-	Read() (arr []broker.Message, err error)
+	Read() (arr []byte, err error)
 }

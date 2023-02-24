@@ -1,13 +1,12 @@
 package http_handler
 
 import (
-	"encoding/json"
 	"io"
 	"net/http"
 )
 
 func (h *Handler) Process(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "image/png")
+	w.Header().Set("Content-Type", "application/json")
 
 	img, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -21,17 +20,9 @@ func (h *Handler) Process(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := json.Marshal(proccessedImg)
+	_, err = w.Write(proccessedImg)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	_, err = w.Write(resp)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	
-	w.WriteHeader(http.StatusCreated)
 }
